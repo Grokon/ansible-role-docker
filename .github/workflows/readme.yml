@@ -6,10 +6,9 @@ name: readme
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
-
+    branches: ["master"]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,7 +21,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
       - name: Generate readme
         uses: actionhippie/ansible-doctor@v1
         with:
@@ -34,6 +33,6 @@ jobs:
         with:
           author_name: GitHub Actions
           add: README.md
-          message: automated readme update [skip ci]
+          message: automated readme update [ci]
           push: true
           commit: --signoff
