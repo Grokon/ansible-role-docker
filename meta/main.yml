@@ -16,5 +16,4 @@ galaxy_info:
     - docker
     - compose
 
-dependencies:
-  - community.docker
+dependencies: []

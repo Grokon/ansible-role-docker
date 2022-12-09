@@ -201,7 +201,7 @@ docker__version: ''
 
 ## Dependencies
 
-- community.docker
+None.
 
 ## License
 

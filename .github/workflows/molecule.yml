@@ -7,9 +7,9 @@ name: Ansible Molecule
 
 on:
   # Schedule updates (once weekly)
-  schedule:
-    - cron: "7 4/15 * * 3,0"
-  workflow_dispatch:
+  # schedule:
+  #   - cron: "7 4/15 * * 3,0"
+  # workflow_dispatch:
   push:
     branches:
       - master
@@ -29,8 +29,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          path: "${{ github.repository }}"
       - name: molecule
         uses: buluma/molecule-action@v5.0.1
         with:
@@ -51,9 +49,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          path: "${{ github.repository }}"
-
       - name: molecule
         uses: buluma/molecule-action@v5.0.1
         with:

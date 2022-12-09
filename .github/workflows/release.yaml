@@ -1,20 +1,14 @@
 ---
-#
-# Ansible managed
-#
-
-name: Release to Ansible Galaxy
+name: Create Release
 
 on:
   push:
     branches:
       - master
+      - main
     tags:
       - v*
 
-# on:
-#   release:
-#     types: [created, edited, published, released]
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -22,25 +16,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: galaxy
-        uses: buluma/galaxy-action@v6.25.22
-        with:
-          galaxy_api_key: ${{ secrets.galaxy_api_key }}
-          git_branch: master
-
-      - name: Get version from GITHUB_REF
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            See changelog [here](https://github.com/Grokon/ansible-role-docker/blob/${{ steps.get_version.outputs.VERSION }}/CHANGELOG.md)
-          draft: false
-          prerelease: false
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')

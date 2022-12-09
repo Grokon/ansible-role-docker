@@ -4,4 +4,11 @@
 - name: Verify
   hosts: all
   gather_facts: false
-  tasks: []
+  tasks:
+    - name: Make sure we are not running podman
+      ansible.builtin.command:
+        cmd: docker --version
+      register: docker_test_one
+      changed_when: docker_test_one.rc != 0
+      failed_when:
+        - '"podman" in docker_test_one.stdout'
