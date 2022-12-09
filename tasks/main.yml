@@ -1,2 +1,77 @@
 ---
-# tasks file for ansible-role-docker
+# tasks file for docker
+
+- name: FAIL; if not Debian
+  ansible.builtin.fail:
+    msg: "This role currently only support Debian"
+  when: ansible_distribution != "Debian"
+
+- name: Disable pinned Docker version
+  ansible.builtin.file:
+    dest: "/etc/apt/preferences.d/docker.pref"
+    state: "absent"
+  when: not docker__version | d()
+
+- name: Enable pinned Docker version
+  ansible.builtin.template:
+    src: "etc/apt/preferences.d/docker.pref.j2"
+    dest: "/etc/apt/preferences.d/docker.pref"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  when: docker__version | d()
+
+- name: Install Docker's dependencies
+  ansible.builtin.apt:
+    name: "{{ docker__package_dependencies }}"
+    state: present
+
+- name: Add Docker's public GPG key to the APT keyring
+  ansible.builtin.apt_key:
+    id: "{{ docker__apt_key_id }}"
+    url: "{{ docker__apt_key_url }}"
+    state: present
+
+- name: Configure Docker's upstream APT repository
+  ansible.builtin.apt_repository:
+    repo: "{{ docker__apt_repository }}"
+    state: present
+    update_cache: true
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: "{{ docker__packges }}"
+    state: "{{ docker__state }}"
+
+- name: Configure Docker daemon options (json)
+  ansible.builtin.template:
+    src: "etc/docker/daemon.json.j2"
+    dest: "/etc/docker/daemon.json"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  when: docker__default_daemon_json | d() or docker__daemon_json | d()
+  notify: ["Restart Docker"]
+
+- name: Manage Docker registry login credentials
+  ansible.builtin.docker_login:
+    registry_url: "{{ item.registry_url | d(omit) }}"
+    username: "{{ item.username }}"
+    password: "{{ item.password }}"
+    email: "{{ item.email | d(omit) }}"
+    reauthorize: "{{ item.reauthorize | d(omit) }}"
+    config_path: "{{ item.config_path | d((ansible_env.PWD | d('/root')) + '/.docker/config.json') }}"
+    state: "{{ item.state | d('present') }}"
+  loop: "{{ docker__registries }}"
+  when: item.username | d() and item.password | d()
+  # vars:
+  #   ansible_python_interpreter: "{{ '/usr/bin/env python-docker' }}"
+
+#############   DOCKER - USERS ############################################
+
+# - name: Ensure docker users are added to the docker group.
+#   ansible.builtin.user:
+#     name: "{{ item }}"
+#     groups: docker
+#     append: true
+#   with_items: "{{ docker_users }}"

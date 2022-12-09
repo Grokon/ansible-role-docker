@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include msltwtf.docker"
+      ansible.builtin.include_role:
+        name: "msltwtf.docker"

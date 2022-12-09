@@ -1,15 +1,15 @@
 galaxy_info:
   role_name: docker
   author: grokon
-  description: An Ansible Role that installs Docker on Debian
-  license: license (MIT)
-  min_ansible_version: "2.10"
+  description: An Ansible Role that installs Docker and docker-compose-plugin on Debian
+  license: MIT
+  min_ansible_version: 5.0.0
   #
   platforms:
     - name: Debian
       versions:
-        - stretch
         - buster
+        - bullseye
 
   galaxy_tags:
     - docker

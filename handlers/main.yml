@@ -1,2 +1,8 @@
 ---
-# handlers file for ansible-role-docker
+# handlers file for docker
+
+- name: Restart Docker
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+    enabled: true
