@@ -21,7 +21,11 @@ repos:
       - id: ansible-lint
         files: \.(ya?ml|j2)$
 
-  - repo: "https://github.com/PyCQA/flake8"
-    rev: "6.0.0"
+  - repo: "local"
     hooks:
-      - id: flake8
+      - id: ansible-doctor
+        name: "Ansible Doctor"
+        entry: "ansible-doctor"
+        pass_filenames: false
+        language: "system"
+        exclude: "molecule/|.github/|.pre-commit-config.yaml"

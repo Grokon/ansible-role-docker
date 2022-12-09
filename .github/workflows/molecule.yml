@@ -58,6 +58,6 @@ jobs:
       - name: molecule
         uses: buluma/molecule-action@v5.0.1
         with:
-          image: ${{ matrix.config.image }}
+          image: ${{ matrix.scenario.image }}
           options: parallel
-          tag: ${{ matrix.config.tag }}
+          tag: ${{ matrix.scenario.tag }}

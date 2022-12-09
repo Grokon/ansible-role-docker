@@ -1,17 +1,21 @@
 ---
-
+# @todo improvement: Add doc for all variables
 ##############################
 # Docker options
 ##############################
+# @var docker__edition:description: >
 # Wanted Docker Edition - can be one of:
 # - 'ce' (Community Edition)
 # - 'ee' (Enterprise Edition)
+# @end
 docker__edition: "ce"
 docker__channel: ["stable"]
 docker__version: ""
+# @var docker__state:description: >
 # Install or remove docker_package :
 # - 'present' for install
 # - 'absent' to uninstall
+# @end
 docker__state: "present"
 
 # Try to use the sudo user by default, but fall back to root.
@@ -20,14 +24,17 @@ docker__state: "present"
 # For example, if the user you want to set is different than the sudo user.
 # docker__users: ['user1', 'user2']
 
+# @var docker__registries:description: List of docker registries to configure.
+# @var docker__registries:example: >
 # docker__registries:
-#  - #registry_url: "https://index.docker.io/v1/"
+#  - registry_url: "https://index.docker.io/v1/"
 #    username: "your_docker_hub_username"
 #    password: "your_docker_hub_password"
-    # email: "your_docker_hub@emailaddress.com"
-    # reauthorize: false
-    # config_path: "$HOME/.docker/config.json"
-    # state: "present"
+# email: "your_docker_hub@emailaddress.com"
+# reauthorize: false
+# config_path: "$HOME/.docker/config.json"
+# state: "present"
+# @end
 docker__registries: []
 
 docker__default_daemon_json: |

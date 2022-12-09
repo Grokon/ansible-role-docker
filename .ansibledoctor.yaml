@@ -1,0 +1,16 @@
+---
+# Don't ask to overwrite if output file exists.
+force_overwrite: true
+
+# Load custom header from given file and append template output to it before write.
+custom_header: HEADER.md
+
+template: readme
+
+logging:
+    # Possible options debug | info | warning | error | critical
+    level: "debug"
+
+exclude_files:
+    - molecule/
+    - .github/

@@ -12,7 +12,6 @@ on:
     tags:
       - v*
 
-
 # on:
 #   release:
 #     types: [created, edited, published, released]
@@ -20,7 +19,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout source
         uses: actions/checkout@v3
 
