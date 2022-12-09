@@ -8,9 +8,9 @@ custom_header: HEADER.md
 template: readme
 
 logging:
-    # Possible options debug | info | warning | error | critical
-    level: "debug"
+  # Possible options debug | info | warning | error | critical
+  level: "warning"
 
 exclude_files:
-    - molecule/
-    - .github/
+  - molecule/
+  - .github/

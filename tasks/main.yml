@@ -1,5 +1,6 @@
 ---
 # tasks file for docker
+# @todo improvement: Add description for all tasks
 
 - name: FAIL; if not Debian
   ansible.builtin.fail:
@@ -26,17 +27,31 @@
     name: "{{ docker__package_dependencies }}"
     state: present
 
-- name: Add Docker's public GPG key to the APT keyring
-  ansible.builtin.apt_key:
-    id: "{{ docker__apt_key_id }}"
-    url: "{{ docker__apt_key_url }}"
-    state: present
+- name: Add Docker's repository
+  block:
+    - name: Add Docker's public GPG key
+      ansible.builtin.get_url:
+        url: "{{ docker__apt_key_url }}"
+        dest: "{{ docker__apt_key }}"
+        mode: "0644"
 
-- name: Configure Docker's upstream APT repository
-  ansible.builtin.apt_repository:
-    repo: "{{ docker__apt_repository }}"
-    state: present
-    update_cache: true
+    - name: Configure Docker's upstream APT repository
+      ansible.builtin.apt_repository:
+        repo: "{{ docker__apt_repository }}"
+        state: present
+        update_cache: true
+
+# - name: Add Docker's public GPG key to the APT keyring
+#   ansible.builtin.apt_key:
+#     id: "{{ docker__apt_key_id }}"
+#     url: "{{ docker__apt_key_url }}"
+#     state: present
+
+# - name: Configure Docker's upstream APT repository
+#   ansible.builtin.apt_repository:
+#     repo: "{{ docker__apt_repository }}"
+#     state: present
+#     update_cache: true
 
 - name: Install Docker
   ansible.builtin.apt:

@@ -38,7 +38,7 @@ An Ansible Role that installs Docker and docker-compose-plugin on Debian
 ## Table of content
 
 - [Default Variables](#default-variables)
-  - [docker__apt_key_id](#docker__apt_key_id)
+  - [docker__apt_key](#docker__apt_key)
   - [docker__apt_key_url](#docker__apt_key_url)
   - [docker__apt_repository](#docker__apt_repository)
   - [docker__channel](#docker__channel)
@@ -59,12 +59,12 @@ An Ansible Role that installs Docker and docker-compose-plugin on Debian
 
 ## Default Variables
 
-### docker__apt_key_id
+### docker__apt_key
 
 #### Default value
 
 ```YAML
-docker__apt_key_id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+docker__apt_key: /etc/apt/trusted.gpg.d/docker.gpg
 ```
 
 ### docker__apt_key_url
@@ -72,8 +72,7 @@ docker__apt_key_id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
 #### Default value
 
 ```YAML
-docker__apt_key_url: https://download.docker.com/linux/{{ ansible_distribution | lower
-  }}/gpg
+docker__apt_key_url: https://download.docker.com/linux/debian/gpg
 ```
 
 ### docker__apt_repository
@@ -82,9 +81,9 @@ docker__apt_key_url: https://download.docker.com/linux/{{ ansible_distribution |
 
 ```YAML
 docker__apt_repository: |
-  deb [arch=amd64]
-  https://download.docker.com/linux/{{ ansible_distribution | lower }}
-  {{ ansible_distribution_release }} {{ docker__channel | join (' ') }}
+  deb [arch=amd64 signed-by={{ docker__apt_key }}]
+  https://download.docker.com/linux/debian
+  {{ ansible_distribution_release }} {{ docker__channel | join(' ') }}
 ```
 
 ### docker__channel
@@ -198,10 +197,11 @@ docker__version: ''
 ## Open Tasks
 
 - (improvement): Add doc for all variables
+- (improvement): Add description for all tasks
 
 ## Dependencies
 
-None.
+- community.docker
 
 ## License
 
