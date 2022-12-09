@@ -1,30 +1,3 @@
-<<<<<<< HEAD
-# workspace
-
-your role description
-
-## Table of content
-
-- [Dependencies](#dependencies)
-- [License](#license)
-- [Author](#author)
-
----
-
-
-
-## Dependencies
-
-None.
-
-## License
-
-license (GPL-2.0-or-later, MIT, etc)
-
-## Author
-
-your name
-=======
 # ansible-role-docker
 
 [![Build Status](https://github.com/haxorof/Grokon/ansible-role-dockerworkflows/CI/badge.svg?branch=master)](https://github.com/Grokon/ansible-role-docker/actions?query=workflow%3ACI)
@@ -210,4 +183,3 @@ MIT
 ## Author
 
 grokon
->>>>>>> 95a2a39 (add ansible-doctor hook)
