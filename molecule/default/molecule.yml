@@ -18,3 +18,31 @@ provisioner:
   name: ansible
 verifier:
   name: ansible
+scenario:
+  create_sequence:
+    - create
+  check_sequence:
+    - cleanup
+    - destroy
+    - create
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - create
+    - converge
+  destroy_sequence:
+    - cleanup
+    - destroy
+  test_sequence:
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
