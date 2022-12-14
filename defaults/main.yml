@@ -37,12 +37,14 @@ docker__state: "present"
 # @end
 docker__registries: []
 
+# docker__tag_unsafe: !unsafe '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
 docker__default_daemon_json: |
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "10m",
     "max-file": "5",
-    "tag": "{{.ImageName}}|{{.Name}}"
+    "tag": "{% raw %}{{.ImageName}}|{{.Name}}{% endraw %}"
   }
 
 docker__daemon_json: ""
@@ -62,7 +64,7 @@ docker__packges:
   - "docker-compose-plugin"
 
 # docker__apt_key_id: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
-docker__apt_key: "/etc/apt/trusted.gpg.d/docker.gpg"
+docker__apt_key: "/usr/share/keyrings/docker-archive-keyring.gpg"
 docker__apt_key_url: "https://download.docker.com/linux/debian/gpg"
 docker__apt_repository: |
   deb [arch=amd64 signed-by={{ docker__apt_key }}]

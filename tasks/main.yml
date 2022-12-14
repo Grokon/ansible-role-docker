@@ -32,8 +32,14 @@
     - name: Add Docker's public GPG key
       ansible.builtin.get_url:
         url: "{{ docker__apt_key_url }}"
-        dest: "{{ docker__apt_key }}"
-        mode: "0644"
+        dest: "{{ docker__apt_key }}_armored"
+        checksum: sha256:1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570 # curl -sL https://download.docker.com/linux/ubuntu/gpg|sha256sum
+
+    - name: De-Armor Docker GPG key
+      ansible.builtin.shell: "gpg --dearmor < {{ docker__apt_key }}_armored > {{ docker__apt_key }}"
+      args:
+        creates: "{{ docker__apt_key }}"
+
 
     - name: Configure Docker's upstream APT repository
       ansible.builtin.apt_repository:

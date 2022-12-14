@@ -6,10 +6,6 @@
 name: Ansible Molecule
 
 on:
-  # Schedule updates (once weekly)
-  # schedule:
-  #   - cron: "7 4/15 * * 3,0"
-  # workflow_dispatch:
   push:
     branches:
       - master
@@ -23,39 +19,57 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-        with:
-          path: "${{ github.repository }}"
-      - name: molecule
-        uses: buluma/molecule-action@v5.0.1
-        with:
-          command: lint
-  test:
-    needs:
-      - lint
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        scenario:
-          - image: "debian-systemd"
-            tag: "latest"
-          - image: "debian-systemd"
-            tag: "buster"
 
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
-          path: "${{ github.repository }}"
-      - name: molecule
-        uses: buluma/molecule-action@v5.0.1
+          path: molecule_demo
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
         with:
-          image: ${{ matrix.scenario.image }}
-          options: parallel
-          tag: ${{ matrix.scenario.tag }}
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install ansible molecule[docker]
+      - name: Test with molecule
+        run: |
+          molecule test
+
+# jobs:
+#   lint:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: checkout
+#         uses: actions/checkout@v3
+#         with:
+#           path: "${{ github.repository }}"
+#       - name: molecule
+#         uses: buluma/molecule-action@v5.0.1
+#         with:
+#           command: lint
+#   test:
+#     needs:
+#       - lint
+#     runs-on: ubuntu-latest
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         scenario:
+#           - image: "ghcr.io/grokon/molecule-containers"
+#             tag: "debian-bullseye"
+
+#     steps:
+#       - name: checkout
+#         uses: actions/checkout@v3
+#         with:
+#           path: "${{ github.repository }}"
+#       - name: molecule
+#         uses: buluma/molecule-action@v5.0.1
+#         with:
+#           image: ${{ matrix.scenario.image }}
+#           options: parallel
+#           tag: ${{ matrix.scenario.tag }}

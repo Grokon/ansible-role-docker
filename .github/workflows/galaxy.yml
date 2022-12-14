@@ -1,4 +1,5 @@
 ---
+
 name: Release to Ansible Galaxy
 
 on:

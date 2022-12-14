@@ -37,7 +37,7 @@ An Ansible Role that installs Docker and docker-compose-plugin on Debian
 #### Default value
 
 ```YAML
-docker__apt_key: /etc/apt/trusted.gpg.d/docker.gpg
+docker__apt_key: /usr/share/keyrings/docker-archive-keyring.gpg
 ```
 
 ### docker__apt_key_url
@@ -85,7 +85,7 @@ docker__default_daemon_json: |
   "log-opts": {
     "max-size": "10m",
     "max-file": "5",
-    "tag": "{{.ImageName}}|{{.Name}}"
+    "tag": "{% raw %}{{.ImageName}}|{{.Name}}{% endraw %}"
   }
 ```
 
