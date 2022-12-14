@@ -11,6 +11,7 @@ platforms:
     override_command: false
     privileged: true
     pre_build_image: true
+    cgroupns_mode: host
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     tmpfs:
