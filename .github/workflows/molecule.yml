@@ -19,6 +19,9 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    working-directory: 'grokon.docker'
 
 jobs:
   molecule:
@@ -33,7 +36,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
         with:
-          path: "${{ github.repository }}"
+          path: 'grokon.docker'
       - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
