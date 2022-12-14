@@ -23,6 +23,12 @@ concurrency:
 jobs:
   molecule:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - debian-bullseye
+
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -40,6 +46,7 @@ jobs:
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
 
 # jobs:
 #   lint:
