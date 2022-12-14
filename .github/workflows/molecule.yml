@@ -1,9 +1,6 @@
 ---
-#
-# Ansible managed
-#
 
-name: Ansible Molecule
+name: Molecule
 
 on:
   push:
