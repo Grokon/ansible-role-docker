@@ -6,6 +6,14 @@
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-grokon.docker-blue.svg)](https://galaxy.ansible.com/grokon/docker/)
 [![Downloads](https://img.shields.io/ansible/role/d/grokon.docker)](https://galaxy.ansible.com/grokon/docker/)
 
+## Example Playbook
+
+```yaml
+- hosts: all
+  roles:
+    - grokon.docker
+```
+
 An Ansible Role that installs Docker and docker-compose-plugin on Debian
 
 ## Table of content
