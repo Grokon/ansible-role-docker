@@ -24,20 +24,22 @@ jobs:
   molecule:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
         with:
-          path: molecule_demo
-      - name: Set up Python 3.10
+          path: "${{ github.repository }}"
+      - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.x"
       - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install ansible molecule[docker]
+        run: python3 -m pip install ansible molecule[docker] docker
       - name: Test with molecule
         run: |
           molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
 
 # jobs:
 #   lint:

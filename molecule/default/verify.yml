@@ -12,3 +12,4 @@
       changed_when: docker_test_one.rc != 0
       failed_when:
         - '"podman" in docker_test_one.stdout'
+        - '"Docker version" not in docker_test_one.stdout'

@@ -64,6 +64,12 @@
     name: "{{ docker__packges }}"
     state: "{{ docker__state }}"
 
+- name: Start Docker
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true
+
 - name: Configure Docker daemon options (json)
   ansible.builtin.template:
     src: "etc/docker/daemon.json.j2"
