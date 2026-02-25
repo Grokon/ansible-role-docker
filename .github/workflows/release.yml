@@ -3,9 +3,9 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
-      - main
+    # branches:
+    #   - master
+    #   - main
     tags:
       - '*'
 
