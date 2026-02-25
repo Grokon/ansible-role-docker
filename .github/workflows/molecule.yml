@@ -27,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - debian-bullseye
+          - debian-trixie
 
     steps:
       - name: checkout
@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: "3.x"
       - name: Install dependencies
-        run: python3 -m pip install ansible molecule[docker] docker
+        run: python3 -m pip install ansible molecule molecule[docker] docker
       - name: Test with molecule
         run: |
           molecule test
