@@ -1,4 +1,4 @@
 ---
-roles:
-  # - name: community.docker
+roles: []
 collections:
+  - name: community.docker

@@ -1,14 +1,11 @@
----
-# Don't ask to overwrite if output file exists.
-force_overwrite: true
+renderer:
+  force_overwrite: true
+  include_header: HEADER.md
 
-# Load custom header from given file and append template output to it before write.
-custom_header: HEADER.md
-
-template: readme
+template:
+  name: readme
 
 logging:
-  # Possible options debug | info | warning | error | critical
   level: "warning"
 
 exclude_files:

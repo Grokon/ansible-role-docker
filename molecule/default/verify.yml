@@ -5,11 +5,9 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Make sure we are not running podman
+    - name: Verify Docker is installed
       ansible.builtin.command:
         cmd: docker --version
-      register: docker_test_one
-      changed_when: docker_test_one.rc != 0
-      failed_when:
-        - '"podman" in docker_test_one.stdout'
-        - '"Docker version" not in docker_test_one.stdout'
+      register: docker_version
+      changed_when: false
+      failed_when: "'Docker version' not in docker_version.stdout"

@@ -7,7 +7,7 @@ platforms:
   - name: instance
     platform: amd64
     #image: geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest
-    image: ghcr.io/grokon/molecule-containers:${MOLECULE_DISTRO:-debian-bullseye}
+    image: ghcr.io/grokon/molecule-containers:${MOLECULE_DISTRO:-debian-trixie}
     override_command: false
     privileged: true
     pre_build_image: true
@@ -21,5 +21,14 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_VERBOSITY: ${MOLECULE_ANSIBLE_VERBOSITY:-0}
+scenario:
+  test_sequence:
+    - destroy
+    - syntax
+    - create
+    - converge
+    - idempotence
+    - verify
+    - destroy
 verifier:
   name: ansible

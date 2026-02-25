@@ -1,6 +1,5 @@
 ---
 # tasks file for docker
-# @todo improvement: Add description for all tasks
 
 - name: FAIL; if not Debian
   ansible.builtin.fail:
@@ -29,39 +28,30 @@
 
 - name: Add Docker's repository
   block:
+    - name: Ensure /etc/apt/keyrings directory exists
+      ansible.builtin.file:
+        path: "/etc/apt/keyrings"
+        state: directory
+        mode: "0755"
+
     - name: Add Docker's public GPG key
       ansible.builtin.get_url:
         url: "{{ docker__apt_key_url }}"
-        dest: "{{ docker__apt_key }}_armored"
-        checksum: sha256:1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570 # curl -sL https://download.docker.com/linux/ubuntu/gpg|sha256sum
-
-    - name: De-Armor Docker GPG key
-      ansible.builtin.shell: "gpg --dearmor < {{ docker__apt_key }}_armored > {{ docker__apt_key }}"
-      args:
-        creates: "{{ docker__apt_key }}"
-
+        dest: "{{ docker__apt_key }}"
+        mode: "0644"
 
     - name: Configure Docker's upstream APT repository
-      ansible.builtin.apt_repository:
-        repo: "{{ docker__apt_repository }}"
-        state: present
-        update_cache: true
-
-# - name: Add Docker's public GPG key to the APT keyring
-#   ansible.builtin.apt_key:
-#     id: "{{ docker__apt_key_id }}"
-#     url: "{{ docker__apt_key_url }}"
-#     state: present
-
-# - name: Configure Docker's upstream APT repository
-#   ansible.builtin.apt_repository:
-#     repo: "{{ docker__apt_repository }}"
-#     state: present
-#     update_cache: true
+      ansible.builtin.copy:
+        content: "{{ docker__apt_repository }}"
+        dest: "/etc/apt/sources.list.d/docker.sources"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      notify: ["Update apt cache"]
 
 - name: Install Docker
   ansible.builtin.apt:
-    name: "{{ docker__packges }}"
+    name: "{{ docker__packages }}"
     state: "{{ docker__state }}"
 
 - name: Start Docker
@@ -69,6 +59,7 @@
     name: docker
     state: started
     enabled: true
+  when: docker__state != "absent"
 
 - name: Configure Docker daemon options (json)
   ansible.builtin.template:
@@ -77,7 +68,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  when: docker__default_daemon_json | d() or docker__daemon_json | d()
+  when: docker__state != "absent" and (docker__default_daemon_json | d({}) or docker__daemon_json | d({}))
   notify: ["Restart Docker"]
 
 - name: Manage Docker registry login credentials
@@ -90,14 +81,4 @@
     config_path: "{{ item.config_path | d((ansible_env.PWD | d('/root')) + '/.docker/config.json') }}"
     state: "{{ item.state | d('present') }}"
   loop: "{{ docker__registries }}"
-  when: item.username | d() and item.password | d()
-  # vars:
-  #   ansible_python_interpreter: "{{ '/usr/bin/env python-docker' }}"
-#############   DOCKER - USERS ############################################
-
-# - name: Ensure docker users are added to the docker group.
-#   ansible.builtin.user:
-#     name: "{{ item }}"
-#     groups: docker
-#     append: true
-#   with_items: "{{ docker_users }}"
+  when: docker__state != "absent" and item.username | d() and item.password | d()

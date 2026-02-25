@@ -1,6 +1,10 @@
 ---
 # handlers file for docker
 
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+
 - name: Restart Docker
   ansible.builtin.systemd:
     name: docker
