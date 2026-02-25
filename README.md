@@ -74,7 +74,7 @@ Written to /etc/apt/sources.list.d/docker.sources.
 docker__apt_repository: |
   Types: deb
   URIs: https://download.docker.com/linux/debian
-  Suites: {{ ansible_distribution_release }}
+  Suites: {{ ansible_facts['distribution_release'] }}
   Components: {{ docker__channel }}
   Signed-By: {{ docker__apt_key }}
 ```
