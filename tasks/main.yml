@@ -49,6 +49,9 @@
         mode: "0644"
       notify: ["Update apt cache"]
 
+- name: Flush handlers to update apt cache
+  ansible.builtin.meta: flush_handlers
+
 - name: Install Docker
   ansible.builtin.apt:
     name: "{{ docker__packages }}"
