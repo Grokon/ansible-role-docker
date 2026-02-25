@@ -4,13 +4,13 @@
 - name: FAIL; if not Debian
   ansible.builtin.fail:
     msg: "This role currently only support Debian"
-  when: ansible_distribution != "Debian"
+  when: ansible_facts['distribution'] != "Debian"
 
 - name: Disable pinned Docker version
   ansible.builtin.file:
     dest: "/etc/apt/preferences.d/docker.pref"
     state: "absent"
-  when: not docker__version | d()
+  when: docker__version | length == 0
 
 - name: Enable pinned Docker version
   ansible.builtin.template:
@@ -19,7 +19,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  when: docker__version | d()
+  when: docker__version | length > 0
 
 - name: Install Docker's dependencies
   ansible.builtin.apt:
@@ -78,7 +78,7 @@
     password: "{{ item.password }}"
     email: "{{ item.email | d(omit) }}"
     reauthorize: "{{ item.reauthorize | d(omit) }}"
-    config_path: "{{ item.config_path | d((ansible_env.PWD | d('/root')) + '/.docker/config.json') }}"
+    config_path: "{{ item.config_path | d((ansible_facts['env']['PWD'] | d('/root')) + '/.docker/config.json') }}"
     state: "{{ item.state | d('present') }}"
   loop: "{{ docker__registries }}"
   when: docker__state != "absent" and item.username | d() and item.password | d()
